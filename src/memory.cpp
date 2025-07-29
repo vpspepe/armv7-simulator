@@ -1,5 +1,6 @@
 #include "memoria.hpp"
-#include <fstream>   // Para std::ifstream (leitura de arquivos)
+#include <fstream> // Para std::ifstream (leitura de arquivos)
+#include <iomanip>
 #include <iostream>  // Para std::cerr (saída de erro)
 #include <stdexcept> // Para std::runtime_error e std::out_of_range
 
@@ -101,4 +102,15 @@ void Memoria::escreverPalavra(uint32_t endereco, uint32_t valor) {
   ram[endereco + 1] = (valor >> 8) & 0xFF;
   ram[endereco + 2] = (valor >> 16) & 0xFF;
   ram[endereco + 3] = (valor >> 24) & 0xFF;
+}
+
+void Memoria::printarConteudo() const {
+  for (size_t i = 0; i < ram.size(); ++i) {
+    std::cout << std::hex << std::uppercase << std::setw(2) << std::setfill('0')
+              << static_cast<int>(ram[i]) << " ";
+    if ((i + 1) % 16 == 0)
+      std::cout << std::endl;
+  }
+  if (ram.size() % 16 != 0)
+    std::cout << std::endl;
 }
