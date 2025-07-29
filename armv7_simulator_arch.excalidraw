@@ -1,0 +1,646 @@
+
+
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source":"https://excalidraw.com",
+  "elements": [
+    {
+      "id": "main_cpp",
+      "type": "rectangle",
+      "x": 310,
+      "y": -330,
+      "width": 450,
+      "height": 180,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#e67700",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1,
+      "version": 1,
+      "versionNonce": 1,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1,
+      "link": null,
+      "locked": false,
+      "text": "main.cpp\n\nResponsabilidade: Ponto de entrada do simulador.\nOrquestra a simulação.\n\nint main(int argc, char* argv[]) {\n  // 1. Valida argumentos\n  // 2. Cria instância da CPU\n  // 3. cpu.carregarPrograma(...)\n  // 4. cpu.executar()\n  // 5. cpu.imprimirEstado()\n}",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 173,
+      "containerId": null,
+      "originalText": "main.cpp\n\nResponsabilidade: Ponto de entrada do simulador.\nOrquestra a simulação.\n\nint main(int argc, char* argv[]) {\n  // 1. Valida argumentos\n  // 2. Cria instância da CPU\n  // 3. cpu.carregarPrograma(...)\n  // 4. cpu.executar()\n  // 5. cpu.imprimirEstado()\n}",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "cpu_module",
+      "type": "rectangle",
+      "x": 200,
+      "y": -50,
+      "width": 670,
+      "height": 300,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#0c8599",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 2,
+      "version": 2,
+      "versionNonce": 2,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 2,
+      "link": null,
+      "locked": false,
+      "text": "cpu.h / cpu.cpp\n\nResponsabilidade: O cérebro. Guarda o estado e orquestra o ciclo.\n\nclass CPU {\nprivate:\n  array<uint32_t, 16> r; // Registradores\n  uint32_t cpsr; // Flags\n  Memoria memoria;\n\n  bool checarCondicao(...);\n\npublic:\n  void executar(); // Loop Fetch-Decode-Execute\n  void carregarPrograma(...);\n  void imprimirEstado();\n\nfriend void executarInstrucao(...);\n};",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 293,
+      "containerId": null,
+      "originalText": "cpu.h / cpu.cpp\n\nResponsabilidade: O cérebro. Guarda o estado e orquestra o ciclo.\n\nclass CPU {\nprivate:\n  array<uint32_t, 16> r; // Registradores\n  uint32_t cpsr; // Flags\n  Memoria memoria;\n\n  bool checarCondicao(...);\n\npublic:\n  void executar(); // Loop Fetch-Decode-Execute\n  void carregarPrograma(...);\n  void imprimirEstado();\n\nfriend void executarInstrucao(...);\n};",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "main_to_cpu_arrow",
+      "type": "arrow",
+      "x": 535,
+      "y": -150,
+      "width": 0,
+      "height": 100,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 3,
+      "version": 3,
+      "versionNonce": 3,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 3,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          100
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "main_cpp",
+        "focus": 0.05,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "cpu_module",
+        "focus": 0,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "memoria_module",
+      "type": "rectangle",
+      "x": -270,
+      "y": -30,
+      "width": 380,
+      "height": 180,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#5f3dc4",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 4,
+      "version": 4,
+      "versionNonce": 4,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 4,
+      "link": null,
+      "locked": false,
+      "text": "memoria.h / memoria.cpp\n\nResponsabilidade: Simula a RAM.\n\nclass Memoria {\nprivate:\n  vector<uint8_t> ram;\npublic:\n  uint32_t lerPalavra(uint32_t end);\n  void escreverPalavra(uint32_t end, uint32_t val);\n  void carregarDeArquivo(...);\n};",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 173,
+      "containerId": null,
+      "originalText": "memoria.h / memoria.cpp\n\nResponsabilidade: Simula a RAM.\n\nclass Memoria {\nprivate:\n  vector<uint8_t> ram;\npublic:\n  uint32_t lerPalavra(uint32_t end);\n  void escreverPalavra(uint32_t end, uint32_t val);\n  void carregarDeArquivo(...);\n};",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "cpu_to_memoria_arrow",
+      "type": "arrow",
+      "x": 200,
+      "y": 60,
+      "width": 90,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 5,
+      "version": 5,
+      "versionNonce": 5,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 5,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -90,
+          0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "cpu_module",
+        "focus": -0.4,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "memoria_module",
+        "focus": 0.5,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "executor_module",
+      "type": "rectangle",
+      "x": 960,
+      "y": -30,
+      "width": 380,
+      "height": 180,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#364fc7",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 6,
+      "version": 6,
+      "versionNonce": 6,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 6,
+      "link": null,
+      "locked": false,
+      "text": "executor.h / executor.cpp\n\nResponsabilidade: Caixa de ferramentas. \nContém a lógica de cada instrução.\n\n// Funções auxiliares\nvoid executar_add(CPU&, const Instrucao&);\nvoid executar_ldr(CPU&, const Instrucao&);\n\n// Função principal\nvoid executarInstrucao(CPU&, const Instrucao&);",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 153,
+      "containerId": null,
+      "originalText": "executor.h / executor.cpp\n\nResponsabilidade: Caixa de ferramentas. \nContém a lógica de cada instrução.\n\n// Funções auxiliares\nvoid executar_add(CPU&, const Instrucao&);\nvoid executar_ldr(CPU&, const Instrucao&);\n\n// Função principal\nvoid executarInstrucao(CPU&, const Instrucao&);",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "cpu_to_executor_arrow",
+      "type": "arrow",
+      "x": 870,
+      "y": 60,
+      "width": 90,
+      "height": 0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 7,
+      "version": 7,
+      "versionNonce": 7,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 7,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          90,
+          0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "cpu_module",
+        "focus": 0.3,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "executor_module",
+        "focus": -0.5,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "decodificador_module",
+      "type": "rectangle",
+      "x": 200,
+      "y": 340,
+      "width": 670,
+      "height": 180,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#5c940d",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 8,
+      "version": 8,
+      "versionNonce": 8,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 8,
+      "link": null,
+      "locked": false,
+      "text": "decodificador.h / decodificador.cpp\n\nResponsabilidade: O tradutor. Pega a instrução de 32 bits e a 'quebra' em partes lógicas.\n\n// Funções auxiliares\nInstrucao decodificarDados(uint32_t);\nInstrucao decodificarMemoria(uint32_t);\n\n// Função principal\nInstrucao decodificar(uint32_t instrucao_binaria);",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 153,
+      "containerId": null,
+      "originalText": "decodificador.h / decodificador.cpp\n\nResponsabilidade: O tradutor. Pega a instrução de 32 bits e a 'quebra' em partes lógicas.\n\n// Funções auxiliares\nInstrucao decodificarDados(uint32_t);\nInstrucao decodificarMemoria(uint32_t);\n\n// Função principal\nInstrucao decodificar(uint32_t instrucao_binaria);",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "cpu_to_decoder_arrow",
+      "type": "arrow",
+      "x": 535,
+      "y": 250,
+      "width": 0,
+      "height": 90,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 9,
+      "version": 9,
+      "versionNonce": 9,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 9,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          90
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "cpu_module",
+        "focus": 0.1,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "decodificador_module",
+        "focus": 0,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "tipos_h",
+      "type": "rectangle",
+      "x": 200,
+      "y": 620,
+      "width": 670,
+      "height": 180,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#f08c00",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 0,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 10,
+      "version": 10,
+      "versionNonce": 10,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 10,
+      "link": null,
+      "locked": false,
+      "text": "tipos.h\n\nResponsabilidade: Dicionário comum. Define os 'contratos' (structs e enums) \nque todos os outros módulos usam para se comunicar.\n\nenum class Opcode { ... };\nenum class Condicao { ... };\n\nstruct OperandoShift { ... };\nstruct Instrucao { ... };",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 133,
+      "containerId": null,
+      "originalText": "tipos.h\n\nResponsabilidade: Dicionário comum. Define os 'contratos' (structs e enums) \nque todos os outros módulos usam para se comunicar.\n\nenum class Opcode { ... };\nenum class Condicao { ... };\n\nstruct OperandoShift { ... };\nstruct Instrucao { ... };",
+      "lineHeight": 1.25
+    },
+    {
+      "id": "decoder_to_tipos_arrow",
+      "type": "arrow",
+      "x": 535,
+      "y": 520,
+      "width": 0,
+      "height": 100,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 11,
+      "version": 11,
+      "versionNonce": 11,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 11,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          100
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "decodificador_module",
+        "focus": 0.05,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "tipos_h",
+        "focus": 0,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "executor_to_tipos_arrow",
+      "type": "arrow",
+      "x": 1150,
+      "y": 150,
+      "width": 0,
+      "height": 470,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 12,
+      "version": 12,
+      "versionNonce": 12,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 12,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -455,
+          0
+        ],
+        [
+          -455,
+          470
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "executor_module",
+        "focus": -0.05,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "tipos_h",
+        "focus": 0.4,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "cpu_to_tipos_arrow",
+      "type": "arrow",
+      "x": 380,
+      "y": 250,
+      "width": 0,
+      "height": 370,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 13,
+      "version": 13,
+      "versionNonce": 13,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 13,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          370
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "cpu_module",
+        "focus": -0.2,
+        "gap": 1
+      },
+      "endBinding": {
+        "elementId": "tipos_h",
+        "focus": -0.3,
+        "gap": 1
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow"
+    },
+    {
+      "id": "label_includes",
+      "type": "text",
+      "x": 580,
+      "y": 550,
+      "width": 120,
+      "height": 50,
+      "angle": 0,
+      "strokeColor": "#c92a2a",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 14,
+      "version": 14,
+      "versionNonce": 14,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 14,
+      "link": null,
+      "locked": false,
+      "text": "Todos dependem\nde \"tipos.h\"",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "baseline": 43,
+      "containerId": null,
+      "originalText": "Todos dependem\nde \"tipos.h\"",
+      "lineHeight": 1.25
+    }
+  ],
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}
