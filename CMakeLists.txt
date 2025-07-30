@@ -42,7 +42,9 @@ target_include_directories(${EXECUTABLE_NAME} PUBLIC include)
 
 # Se você tivesse bibliotecas externas para linkar, usaria:
 # target_link_libraries(${EXECUTABLE_NAME} PUBLIC nome_da_biblioteca)
-
+find_package(Curses REQUIRED)
+# Linka o nosso executável com a biblioteca encontrada
+target_link_libraries(${EXECUTABLE_NAME} PUBLIC ${CURSES_LIBRARIES})
 # --- Organização dos Arquivos de Saída (Opcional, mas recomendado) ---
 
 # Define que os executáveis finais devem ser colocados na pasta 'bin' dentro do
