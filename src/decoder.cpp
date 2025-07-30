@@ -123,7 +123,7 @@ namespace {
     } 
 }
 
-Instrucao decode(uint32_t instr_binaria) {
+Instrucao decodificar(uint32_t instr_binaria) {
     uint8_t type = (instr_binaria >> 25) & 0b111;
 
     // Tipo da instrução

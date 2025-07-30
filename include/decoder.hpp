@@ -12,4 +12,4 @@
  * @param instrucao_binaria A palavra de 32 bits lida da memória.
  * @return Uma struct Instrucao preenchida com as informações decodificadas.
  */
-Instrucao decode(uint32_t instr_binaria);
+Instrucao decodificar(uint32_t instr_binaria);
