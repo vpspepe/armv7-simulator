@@ -1,4 +1,7 @@
 #include "memoria.hpp"
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
 #include <fstream> // Para std::ifstream (leitura de arquivos)
 #include <iomanip>
 #include <iostream>  // Para std::cerr (saída de erro)
@@ -13,8 +16,6 @@
 Memoria::Memoria(size_t tamanho_em_bytes) : ram(tamanho_em_bytes, 0) {}
 
 /**
- * @brief Carrega um arquivo binário cru na memória.
- *
  * Abre um arquivo em modo binário e copia seu conteúdo diretamente
  * para o vetor 'ram', a partir de um endereço inicial.
  */
@@ -44,8 +45,6 @@ void Memoria::carregarDeArquivo(const std::string &nome_arquivo,
 }
 
 /**
- * @brief Lê uma palavra de 32 bits da memória.
- *
  * Realiza verificações de alinhamento e limites antes de ler 4 bytes
  * e combiná-los em um inteiro de 32 bits, respeitando a ordem little-endian.
  */
@@ -104,13 +103,49 @@ void Memoria::escreverPalavra(uint32_t endereco, uint32_t valor) {
   ram[endereco + 3] = (valor >> 24) & 0xFF;
 }
 
-void Memoria::printarConteudo() const {
-  for (size_t i = 0; i < ram.size(); ++i) {
+void Memoria::printarConteudo(int start_address, int end_address) {
+  if (end_address == -1)
+    end_address = ram.size();
+  // Assertions para garantir que os endereços estão dentro dos limites
+  assertValidStartEndAddress(start_address, end_address);
+  // Trackear os endereços printados
+  size_t address = start_address;
+  printColHeader(start_address, end_address);
+  std::cout << std::hex << std::uppercase << std::setw(8) << std::setfill('0')
+            << address << ": ";
+  // Iterar sobre valores da memória RAM
+  for (size_t i = start_address; i < size_t(end_address); ++i) {
     std::cout << std::hex << std::uppercase << std::setw(2) << std::setfill('0')
               << static_cast<int>(ram[i]) << " ";
-    if ((i + 1) % 16 == 0)
+    address++;
+    // A cada 16 bytes, pula para a próxima linha e imprime o endereço
+    // correspondente.
+    if ((i + 1) % 16 == 0) {
       std::cout << std::endl;
+      std::cout << std::hex << std::uppercase << std::setw(8)
+                << std::setfill('0') << address << ": ";
+    }
   }
-  if (ram.size() % 16 != 0)
-    std::cout << std::endl;
+  std::cout << std::endl;
+}
+
+void Memoria::printColHeader(int start_address, int end_address) {
+  std::cout << "Conteúdo da memória de " << std::hex << std::uppercase
+            << std::setw(8) << std::setfill('0') << start_address << " até "
+            << std::hex << std::uppercase << std::setw(8) << std::setfill('0')
+            << end_address - 1 << ":" << std::endl;
+  std::cout << "Endereços: ";
+  // Imprimir colunas de endereços: 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+  std::cout << std::endl << "          ";
+  for (int i = 0; i < 16; ++i) {
+    std::cout << std::hex << std::uppercase << std::setw(2) << std::setfill('0')
+              << i << " ";
+  }
+  std::cout << std::endl;
+}
+
+void Memoria::assertValidStartEndAddress(int start_address, int end_address) {
+  assert(("start_address deve ser >= 0", start_address >= 0));
+  assert(("end_address deve ser <= tamanho da RAM", end_address <= ram.size()));
+  assert(("start_address deve ser < end_address", start_address < end_address));
 }

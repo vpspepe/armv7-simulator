@@ -47,9 +47,12 @@ public:
    */
   void escreverPalavra(uint32_t endereco, uint32_t valor);
 
-  void printarConteudo() const;
+  void printarConteudo(int start_address = 0, int end_address = -1);
 
 private:
   // A memória é simulada como um vetor de bytes para maior flexibilidade.
   std::vector<uint8_t> ram;
+  void printColHeader(int start_address, int end_address);
+  void assertValidStartEndAddress(int start_address, int end_address);
+  // Verifica se os endereços estão dentro dos limites da memória
 };
