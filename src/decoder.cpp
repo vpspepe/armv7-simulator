@@ -1,4 +1,4 @@
-#include "decoder.h"
+#include "decoder.hpp"
 #include <stdexcept>
 
 namespace {
