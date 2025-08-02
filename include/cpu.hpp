@@ -42,7 +42,6 @@ public:
     // aos membros privados e protegidos da CPU (registradores, cpsr, etc.).
     friend void executarInstrucao(CPU& cpu, const Instrucao& instr);
 
-private:
     std::array<uint32_t, 16> r; // Registradores R0-R15 (R15 é o PC)
     uint32_t cpsr;              // Current Program Status Register
     Memoria memoria;            // Instância do nosso módulo de memória
