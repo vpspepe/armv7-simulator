@@ -404,7 +404,7 @@
       "endArrowhead": "arrow"
     },
     {
-      "id": "tipos_h",
+      "id": "tipos.hpp",
       "type": "rectangle",
       "x": 200,
       "y": 620,
@@ -431,14 +431,14 @@
       "updated": 10,
       "link": null,
       "locked": false,
-      "text": "tipos.h\n\nResponsabilidade: Dicionário comum. Define os 'contratos' (structs e enums) \nque todos os outros módulos usam para se comunicar.\n\nenum class Opcode { ... };\nenum class Condicao { ... };\n\nstruct OperandoShift { ... };\nstruct Instrucao { ... };",
+      "text": "tipos.hpp\n\nResponsabilidade: Dicionário comum. Define os 'contratos' (structs e enums) \nque todos os outros módulos usam para se comunicar.\n\nenum class Opcode { ... };\nenum class Condicao { ... };\n\nstruct OperandoShift { ... };\nstruct Instrucao { ... };",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "baseline": 133,
       "containerId": null,
-      "originalText": "tipos.h\n\nResponsabilidade: Dicionário comum. Define os 'contratos' (structs e enums) \nque todos os outros módulos usam para se comunicar.\n\nenum class Opcode { ... };\nenum class Condicao { ... };\n\nstruct OperandoShift { ... };\nstruct Instrucao { ... };",
+      "originalText": "tipos.hpp\n\nResponsabilidade: Dicionário comum. Define os 'contratos' (structs e enums) \nque todos os outros módulos usam para se comunicar.\n\nenum class Opcode { ... };\nenum class Condicao { ... };\n\nstruct OperandoShift { ... };\nstruct Instrucao { ... };",
       "lineHeight": 1.25
     },
     {
@@ -486,7 +486,7 @@
         "gap": 1
       },
       "endBinding": {
-        "elementId": "tipos_h",
+        "elementId": "tipos.hpp",
         "focus": 0,
         "gap": 1
       },
@@ -542,7 +542,7 @@
         "gap": 1
       },
       "endBinding": {
-        "elementId": "tipos_h",
+        "elementId": "tipos.hpp",
         "focus": 0.4,
         "gap": 1
       },
@@ -594,7 +594,7 @@
         "gap": 1
       },
       "endBinding": {
-        "elementId": "tipos_h",
+        "elementId": "tipos.hpp",
         "focus": -0.3,
         "gap": 1
       },
@@ -627,14 +627,14 @@
       "updated": 14,
       "link": null,
       "locked": false,
-      "text": "Todos dependem\nde \"tipos.h\"",
+      "text": "Todos dependem\nde \"tipos.hpp\"",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "baseline": 43,
       "containerId": null,
-      "originalText": "Todos dependem\nde \"tipos.h\"",
+      "originalText": "Todos dependem\nde \"tipos.hpp\"",
       "lineHeight": 1.25
     }
   ],

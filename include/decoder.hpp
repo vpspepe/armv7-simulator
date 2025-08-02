@@ -1,5 +1,5 @@
 #pragma once
-#include "tipos.h"
+#include "tipos.hpp"
 #include <cstdint>
 
 /**

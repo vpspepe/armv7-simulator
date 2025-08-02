@@ -1,5 +1,5 @@
 #pragma once
-#include "tipos.h" // Precisa conhecer a struct Instrucao
+#include "tipos.hpp" // Precisa conhecer a struct Instrucao
 
 // Declaração avançada: diz ao compilador "existe uma classe chamada CPU",
 // sem precisar de todos os detalhes dela.
