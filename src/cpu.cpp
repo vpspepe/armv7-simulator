@@ -30,7 +30,6 @@ void CPU::executar() {
         // Condição de parada
         if (instrucao_binaria == 0) {
             std::cout << "--- Fim da Simulação (instrução nula encontrada) ---\n";
-            imprimirEstado();
             break;
         }
 
