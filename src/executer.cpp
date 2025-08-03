@@ -147,7 +147,7 @@ void executar_cmp(CPU &cpu, const Instrucao &instr) {
  * @brief Executa a instrução B (branch).
  */
 void executar_b(CPU &cpu, const Instrucao &instr) {
-  cpu.r[15] += instr.offset_salto; // PC já foi incrementado no ciclo da CPU
+  cpu.r[15] += instr.offset_salto + 4; // PC já foi incrementado no ciclo da CPU
 }
 
 /**
@@ -155,7 +155,7 @@ void executar_b(CPU &cpu, const Instrucao &instr) {
  */
 void executar_bl(CPU &cpu, const Instrucao &instr) {
   cpu.r[14] = cpu.r[15]; // Link Register (R14)
-  cpu.r[15] += instr.offset_salto;
+  cpu.r[15] += instr.offset_salto + 4;
 }
 
 } // namespace

@@ -1,6 +1,6 @@
 # Nome base do programa (sem extensão)
 PROG = program
-
+LINKER_SCRIPT = linker.ld
 # Ferramentas da toolchain ARM
 AS = arm-none-eabi-as
 LD = arm-none-eabi-ld
@@ -21,7 +21,7 @@ $(PROG).o: $(PROG).s
 
 # Linka para gerar .elf com base no endereço 0x8000
 $(PROG).elf: $(PROG).o
-	$(LD) $(LDFLAGS) -o $@ $<
+	$(LD) -T $(LINKER_SCRIPT) -o $@ $<
 
 # Converte para .img (binário cru, sem cabeçalhos)
 $(PROG).img: $(PROG).elf
