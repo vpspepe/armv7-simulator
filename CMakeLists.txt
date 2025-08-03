@@ -10,10 +10,10 @@ project(
 # --- Configurações do Compilador ---
 
 # Define o padrão C++ a ser utilizado (C++17 é uma boa escolha moderna).
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+set(CMAKE_CXX_COMPILER "g++")
 # Adiciona flags de compilação para todos os alvos do projeto. -Wall e -Wextra:
 # Ativam um conjunto robusto de avisos (warnings). -pedantic: Garante
 # conformidade com o padrão C++. -g: Inclui informações de depuração no

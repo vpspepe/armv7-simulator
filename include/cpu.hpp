@@ -8,6 +8,7 @@ struct Instrucao;
 Instrucao decodificar(uint32_t instrucao_binaria);
 void executarInstrucao(class CPU &cpu, const Instrucao &instr);
 
+class TUIViewer; // Declaração avançada para evitar dependência circular
 /**
  * @class CPU
  * @brief Simula o estado e o ciclo de execução de um processador ARM.
@@ -19,6 +20,7 @@ public:
    * @param memoria_bytes O tamanho da memória RAM a ser alocada para o
    * simulador.
    */
+  friend class TUIViewer;
   CPU(size_t memoria_bytes);
 
   /**
@@ -32,7 +34,7 @@ public:
   /**
    * @brief Inicia o loop principal de simulação (Fetch-Decode-Execute).
    */
-  void executar();
+  bool executar();
 
   /**
    * @brief Imprime o estado atual dos registradores e flags.

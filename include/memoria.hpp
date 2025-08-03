@@ -36,7 +36,8 @@ public:
    * @return O valor de 32 bits lido.
    * @throws std::out_of_range se o endereço for inválido.
    */
-  uint32_t lerPalavra(uint32_t endereco);
+  uint32_t lerPalavra(uint32_t endereco) const;
+  size_t getTamanho() const { return ram.size(); }
 
   /**
    * @brief Escreve uma palavra de 32 bits na memória.

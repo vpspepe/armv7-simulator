@@ -18,37 +18,36 @@ void CPU::carregarPrograma(const std::string &nome_arquivo,
 }
 
 // O loop principal de execução do simulador.
-void CPU::executar() {
-  while (true) {
-    // FETCH
-    // Busca a instrução de 32 bits do endereço apontado pelo PC (R15)
-    uint32_t instrucao_binaria = memoria.lerPalavra(r[15]);
+bool CPU::executar() {
+  // FETCH
+  // Busca a instrução de 32 bits do endereço apontado pelo PC (R15)
+  uint32_t instrucao_binaria = memoria.lerPalavra(r[15]);
 
-    // Em um processador real, o PC é incrementado durante o ciclo.
-    // Faremos isso antes da execução para simplificar a lógica de saltos.
-    uint32_t pc_atual = r[15];
-    r[15] += 4;
+  // Em um processador real, o PC é incrementado durante o ciclo.
+  // Faremos isso antes da execução para simplificar a lógica de saltos.
+  uint32_t pc_atual = r[15];
+  r[15] += 4;
 
-    // Condição de parada
-    if (instrucao_binaria == 0) {
-      std::cout << "--- Fim da Simulação (instrução nula encontrada) ---\n";
-      break;
-    }
-
-    // DECODE
-    // Envia a instrução binária para o módulo decodificador.
-    Instrucao instr = decodificar(instrucao_binaria);
-
-    // EXECUTE
-    // Primeiro, verifica se a condição da instrução é satisfeita.
-    if (checarCondicao(instr.cond)) {
-      // Se sim, envia a instrução decodificada e uma referência de si mesma
-      // para o módulo executor realizar a operação.
-      executarInstrucao(*this, instr);
-    }
-    // Se a condição não for satisfeita, a instrução é ignorada e o PC
-    // simplesmente continua com o valor já incrementado.
+  // Condição de parada
+  if (instrucao_binaria == 0) {
+    std::cout << "--- Fim da Simulação (instrução nula encontrada) ---\n";
+    return false; // Retorna falso para indicar que a simulação terminou
   }
+
+  // DECODE
+  // Envia a instrução binária para o módulo decodificador.
+  Instrucao instr = decodificar(instrucao_binaria);
+
+  // EXECUTE
+  // Primeiro, verifica se a condição da instrução é satisfeita.
+  if (checarCondicao(instr.cond)) {
+    // Se sim, envia a instrução decodificada e uma referência de si mesma
+    // para o módulo executor realizar a operação.
+    executarInstrucao(*this, instr);
+  }
+  // Se a condição não for satisfeita, a instrução é ignorada e o PC
+  // simplesmente continua com o valor já incrementado.
+  return true; // Retorna verdadeiro para continuar a simulação
 }
 
 // Imprime o estado atual dos registradores e flags

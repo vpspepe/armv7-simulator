@@ -49,7 +49,7 @@ void Memoria::carregarDeArquivo(const std::string &nome_arquivo,
  * Realiza verificações de alinhamento e limites antes de ler 4 bytes
  * e combiná-los em um inteiro de 32 bits, respeitando a ordem little-endian.
  */
-uint32_t Memoria::lerPalavra(uint32_t endereco) {
+uint32_t Memoria::lerPalavra(uint32_t endereco) const {
   // Validação: Garante que o endereço é alinhado em 4 bytes.
   if (endereco % 4 != 0) {
     // Em um processador real, isso geraria uma exceção de Data Abort.
