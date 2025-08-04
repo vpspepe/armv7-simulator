@@ -1,69 +1,82 @@
 #include "tuiviewer.hpp"
-#include "cpu.hpp" // Inclui a definição completa da CPU
-#include <ncurses.h>
 #include <string>
 #include <vector>
 
-// --- Declarações de Funções Auxiliares Internas ---
-namespace {
-void desenharPainelRegistradores(WINDOW *win, const CPU &cpu);
-void desenharPainelFlags(WINDOW *win, const CPU &cpu);
-void desenharPainelCodigo(WINDOW *win, const CPU &cpu);
-void desenharPainelMemoria(WINDOW *win, const CPU &cpu);
-} // namespace
+// Construtor: inicializa o ncurses e cria os painéis.
+TUIViewer::TUIViewer() : endereco_memoria_atual(0x8000) {
+  initscr();            // Inicia o modo ncurses
+  cbreak();             // Desabilita buffer de linha
+  noecho();             // Não exibe o caractere digitado
+  curs_set(0);          // Esconde o cursor
+  start_color();        // Habilita cores
+  keypad(stdscr, TRUE); // Habilita teclas especiais (setas)
 
-// Construtor: inicializa o ncurses.
-TUIViewer::TUIViewer() {
-  initscr();
-  cbreak();
-  noecho();
-  curs_set(0);
-  start_color();
-  keypad(stdscr, TRUE);
-  init_pair(1, COLOR_YELLOW, COLOR_BLACK);
-  init_pair(2, COLOR_CYAN, COLOR_BLACK);
+  // Define os pares de cores que usaremos
+  init_pair(1, COLOR_YELLOW, COLOR_BLACK); // Destaque Amarelo
+  init_pair(2, COLOR_CYAN, COLOR_BLACK);   // Destaque Ciano
+
+  // Cria as janelas (painéis) uma única vez no construtor
+  int height, width;
+  getmaxyx(stdscr, height, width);
+
+  win_borda = newwin(height, width, 0, 0);
+  win_regs = newwin(18, 35, 3, 2);
+  win_flags = newwin(4, 35, 21, 2);
+  win_code = newwin(10, 50, 3, 38);
+  win_memory = newwin(12, 50, 13, 38);
 }
 
-// Destrutor: restaura o terminal.
-TUIViewer::~TUIViewer() { endwin(); }
+// Destrutor: libera a memória das janelas e restaura o terminal.
+TUIViewer::~TUIViewer() {
+  delwin(win_regs);
+  delwin(win_flags);
+  delwin(win_code);
+  delwin(win_memory);
+  delwin(win_borda);
+  endwin();
+}
 
-int TUIViewer::esperarInput() { return getch(); }
+int TUIViewer::esperarInput() {
+  return wgetch(win_borda); // Espera input na janela principal
+}
 
-// O método principal que desenha todo o "dashboard".
+void TUIViewer::rolarMemoria(int offset) {
+  if (offset < 0 && endereco_memoria_atual < (uint32_t)(-offset)) {
+    endereco_memoria_atual = 0;
+  } else {
+    // (Adicionar verificação de limite superior aqui se necessário)
+    endereco_memoria_atual += offset;
+  }
+}
+
+// Método principal que chama todas as funções de desenho.
 void TUIViewer::desenhar(const CPU &cpu) {
   int height, width;
   getmaxyx(stdscr, height, width);
 
-  clear();
+  // Desenha a borda principal e o texto de ajuda
+  werase(win_borda);
+  box(win_borda, 0, 0);
+  wattron(win_borda, A_BOLD);
+  mvwprintw(win_borda, 1, (width - 24) / 2, "Simulador ARMv7 - PCS3732");
+  wattroff(win_borda, A_BOLD);
+  mvwprintw(win_borda, height - 2, 2,
+            "Comandos: [p] Passo | [↑/↓] Rolar Memória | [q] Sair");
+  wrefresh(win_borda);
 
-  box(stdscr, 0, 0);
-  attron(A_BOLD);
-  mvprintw(1, (width - 24) / 2, "Simulador ARMv7 - PCS3732");
-  attroff(A_BOLD);
-  mvprintw(height - 2, 2, "Comandos: [s] Step | [q] Quit");
-  refresh();
-
-  WINDOW *reg_win = newwin(18, 35, 3, 2);
-  WINDOW *flag_win = newwin(4, 35, 21, 2);
-  WINDOW *code_win = newwin(10, 50, 3, 38);
-  WINDOW *mem_win = newwin(12, 50, 13, 38);
-
-  desenharPainelRegistradores(reg_win, cpu);
-  desenharPainelFlags(flag_win, cpu);
-  desenharPainelCodigo(code_win, cpu);
-  desenharPainelMemoria(mem_win, cpu);
-
-  delwin(reg_win);
-  delwin(flag_win);
-  delwin(code_win);
-  delwin(mem_win);
+  // Chama as funções para desenhar o conteúdo de cada painel
+  desenharPainelRegistradores(cpu);
+  desenharPainelFlags(cpu);
+  desenharPainelCodigo(cpu);
+  desenharPainelMemoria(cpu);
 }
 
-// --- Implementação das Funções Auxiliares de Desenho ---
-namespace {
-void desenharPainelRegistradores(WINDOW *win, const CPU &cpu) {
-  box(win, 0, 0);
-  mvwprintw(win, 0, 2, " Registradores ");
+// --- Implementação dos Métodos Privados de Desenho ---
+
+void TUIViewer::desenharPainelRegistradores(const CPU &cpu) {
+  werase(win_regs);
+  box(win_regs, 0, 0);
+  mvwprintw(win_regs, 0, 2, " Registradores ");
 
   for (int i = 0; i < 16; ++i) {
     std::string reg_name = "R" + std::to_string(i);
@@ -74,84 +87,73 @@ void desenharPainelRegistradores(WINDOW *win, const CPU &cpu) {
     if (i == 15)
       reg_name = "PC (R15)";
 
-    // Acesso direto ao membro privado 'r', permitido pela declaração 'friend'.
-    mvwprintw(win, i + 1, 2, "%-8s: 0x%08X", reg_name.c_str(), cpu.r[i]);
+    mvwprintw(win_regs, i + 1, 2, "%-8s: 0x%08X", reg_name.c_str(), cpu.r[i]);
   }
-  wrefresh(win);
+  wrefresh(win_regs);
 }
 
-void desenharPainelFlags(WINDOW *win, const CPU &cpu) {
-  box(win, 0, 0);
-  mvwprintw(win, 0, 2, " Flags (CPSR) ");
+void TUIViewer::desenharPainelFlags(const CPU &cpu) {
+  werase(win_flags);
+  box(win_flags, 0, 0);
+  mvwprintw(win_flags, 0, 2, " Flags (CPSR) ");
 
-  // Acesso direto ao membro privado 'cpsr' para extrair os flags.
   bool N = (cpu.cpsr >> 31) & 1;
   bool Z = (cpu.cpsr >> 30) & 1;
   bool C = (cpu.cpsr >> 29) & 1;
   bool V = (cpu.cpsr >> 28) & 1;
 
-  mvwprintw(win, 1, 4, "N=%d  Z=%d  C=%d  V=%d", N, Z, C, V);
-  wrefresh(win);
+  mvwprintw(win_flags, 1, 4, "N=%d  Z=%d  C=%d  V=%d", N, Z, C, V);
+  wrefresh(win_flags);
 }
 
-void desenharPainelCodigo(WINDOW *win, const CPU &cpu) {
-  box(win, 0, 0);
-  mvwprintw(win, 0, 2, " Código @ PC ");
+void TUIViewer::desenharPainelCodigo(const CPU &cpu) {
+  werase(win_code);
+  box(win_code, 0, 0);
+  mvwprintw(win_code, 0, 2, " Código @ PC ");
 
-  // Acesso direto a r[15] para pegar o PC.
   uint32_t pc = cpu.r[15];
 
   for (int i = -4; i <= 4; ++i) {
     uint32_t addr = pc + (i * 4);
-
     try {
-      // Acesso direto ao membro 'memoria' e seu método público.
       uint32_t instrucao = cpu.memoria.lerPalavra(addr);
-      if (i == 0) {
-        wattron(win, A_REVERSE);
-      }
-
-      mvwprintw(win, i + 5, 2, "> 0x%08X: 0x%08X", addr, instrucao);
-
-      if (i == 0) {
-        wattroff(win, A_REVERSE);
-      }
-    } catch (const std::exception &e) {
-      // Endereço inválido, não desenha nada para aquela linha
+      if (i == 0)
+        wattron(win_code, A_REVERSE);
+      mvwprintw(win_code, i + 5, 2, "> 0x%08X: 0x%08X", addr, instrucao);
+      if (i == 0)
+        wattroff(win_code, A_REVERSE);
+    } catch (...) {
+      mvwprintw(win_code, i + 5, 2, "> 0x%08X: --- (fora dos limites)", addr);
     }
   }
-  wrefresh(win);
+  wrefresh(win_code);
 }
 
-void desenharPainelMemoria(WINDOW *win, const CPU &cpu) {
-  box(win, 0, 0);
-  // Acesso direto a r[13] para pegar o SP.
-  uint32_t sp = cpu.r[13];
-  uint32_t base_addr = (sp > 16) ? (sp - 16) & 0xFFFFFFF0 : 0;
+void TUIViewer::desenharPainelMemoria(const CPU &cpu) {
+  werase(win_memory);
+  box(win_memory, 0, 0);
+  mvwprintw(win_memory, 0, 2, " Memória @ 0x%08X ",
+            this->endereco_memoria_atual);
 
-  mvwprintw(win, 0, 2, " Memória @ SP (0x%08X) ", sp);
+  uint32_t sp = cpu.r[13];
 
   for (int linha = 0; linha < 10; ++linha) {
-    uint32_t addr_linha = base_addr + (linha * 4);
-    // Assumindo que a classe Memoria tem um método público getTamanho()
-    // if (addr_linha >= cpu.memoria.getTamanho()) break;
-
+    uint32_t addr_linha = this->endereco_memoria_atual + (linha * 4);
     try {
       if (addr_linha == (sp & 0xFFFFFFFC)) {
-        wattron(win, COLOR_PAIR(2));
+        wattron(win_memory, COLOR_PAIR(2));
       }
 
-      // Acesso direto ao membro 'memoria' e seu método público.
-      mvwprintw(win, linha + 1, 2, "0x%08X: 0x%08X", addr_linha,
+      mvwprintw(win_memory, linha + 1, 2, "0x%08X: 0x%08X", addr_linha,
                 cpu.memoria.lerPalavra(addr_linha));
 
       if (addr_linha == (sp & 0xFFFFFFFC)) {
-        wattroff(win, COLOR_PAIR(2));
+        wattroff(win_memory, COLOR_PAIR(2));
       }
-    } catch (const std::exception &e) {
-      // Endereço inválido, não desenha
+    } catch (...) {
+      mvwprintw(win_memory, linha + 1, 2, "0x%08X: --- (fora dos limites)",
+                addr_linha);
     }
   }
-  wrefresh(win);
+  wrefresh(win_memory);
 }
-} // namespace

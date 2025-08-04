@@ -50,12 +50,12 @@ void Memoria::carregarDeArquivo(const std::string &nome_arquivo,
  */
 uint32_t Memoria::lerPalavra(uint32_t endereco) const {
   // Validação: Garante que o endereço é alinhado em 4 bytes.
-  if (endereco % 4 != 0) {
-    // Em um processador real, isso geraria uma exceção de Data Abort.
-    throw std::runtime_error(
-        "Erro de alinhamento: Tentativa de leitura em endereço não alinhado: " +
-        std::to_string(endereco));
-  }
+  // if (endereco % 4 != 0) {
+  //   // Em um processador real, isso geraria uma exceção de Data Abort.
+  //   throw std::runtime_error(
+  //       "Erro de alinhamento: Tentativa de leitura em endereço não alinhado:
+  //       " + std::to_string(endereco));
+  // }
 
   // Validação: Garante que o endereço está dentro dos limites da memória.
   if (endereco + 3 >= ram.size()) {
@@ -82,11 +82,11 @@ uint32_t Memoria::lerPalavra(uint32_t endereco) const {
  */
 void Memoria::escreverPalavra(uint32_t endereco, uint32_t valor) {
   // Validação: Garante que o endereço é alinhado em 4 bytes.
-  if (endereco % 4 != 0) {
-    throw std::runtime_error(
-        "Erro de alinhamento: Tentativa de escrita em endereço não alinhado: " +
-        std::to_string(endereco));
-  }
+  // if (endereco % 4 != 0) {
+  //   throw std::runtime_error(
+  //       "Erro de alinhamento: Tentativa de escrita em endereço não alinhado:
+  //       " + std::to_string(endereco));
+  // }
 
   // Validação: Garante que o endereço está dentro dos limites da memória.
   if (endereco + 3 >= ram.size()) {

@@ -1,4 +1,5 @@
 #include "decoder.hpp"
+#include <iostream>
 #include <stdexcept>
 
 namespace Decoder {
@@ -157,4 +158,125 @@ Instrucao decodificar(uint32_t instr_binaria) {
   Instrucao invalid_instr;
   invalid_instr.opcode = Opcode::INVALIDO;
   return invalid_instr;
+}
+// Funções para converter os enums em strings legíveis
+namespace {
+const char *opcodeToString(Opcode op) {
+  switch (op) {
+  case Opcode::ADD:
+    return "ADD";
+  case Opcode::SUB:
+    return "SUB";
+  case Opcode::AND:
+    return "AND";
+  case Opcode::ORR:
+    return "ORR";
+  case Opcode::EOR:
+    return "EOR";
+  case Opcode::MOV:
+    return "MOV";
+  case Opcode::CMP:
+    return "CMP";
+  case Opcode::LDR:
+    return "LDR";
+  case Opcode::STR:
+    return "STR";
+  case Opcode::B:
+    return "B";
+  case Opcode::BL:
+    return "BL";
+  default:
+    return "INVALIDO";
+  }
+}
+
+const char *condToString(Condicao cond) {
+  switch (cond) {
+  case Condicao::EQ:
+    return "EQ (Equal)";
+  case Condicao::NE:
+    return "NE (Not Equal)";
+  case Condicao::CS:
+    return "CS (Carry Set)";
+  case Condicao::CC:
+    return "CC (Carry Clear)";
+  case Condicao::MI:
+    return "MI (Minus)";
+  case Condicao::PL:
+    return "PL (Plus)";
+  case Condicao::VS:
+    return "VS (Overflow)";
+  case Condicao::VC:
+    return "VC (No Overflow)";
+  case Condicao::HI:
+    return "HI (Unsigned Higher)";
+  case Condicao::LS:
+    return "LS (Unsigned Lower or Same)";
+  case Condicao::GE:
+    return "GE (Signed Greater or Equal)";
+  case Condicao::LT:
+    return "LT (Signed Less Than)";
+  case Condicao::GT:
+    return "GT (Signed Greater Than)";
+  case Condicao::LE:
+    return "LE (Signed Less or Equal)";
+  case Condicao::AL:
+    return "AL (Always)";
+  default:
+    return "???";
+  }
+}
+} // namespace
+// --- IMPLEMENTAÇÃO DA FUNÇÃO DE DEBUG ---
+
+void printarInstrucao(const Instrucao &instr) {
+  std::cout << "--- [Debug da Instrução Decodificada] ---\n";
+  std::cout << "  Opcode:   " << opcodeToString(instr.opcode) << "\n";
+  std::cout << "  Condição: " << condToString(instr.cond) << "\n";
+
+  // Imprime campos relevantes para o tipo de instrução
+  switch (instr.opcode) {
+  case Opcode::ADD:
+  case Opcode::SUB:
+  case Opcode::AND:
+  case Opcode::ORR:
+  case Opcode::EOR:
+  case Opcode::MOV:
+  case Opcode::CMP:
+    std::cout << "  S Flag:   " << (instr.s_flag ? "Sim" : "Não") << "\n";
+    std::cout << "  Rd:       " << (int)instr.rd << "\n";
+    std::cout << "  Rn:       " << (int)instr.rn << "\n";
+    if (instr.operando_shift.eh_valido) {
+      std::cout << "  Operando2 (Shift): Rm="
+                << (int)instr.operando_shift.reg_base
+                << ", Tipo=" << (int)instr.operando_shift.tipo
+                << ", Qtd=" << (int)instr.operando_shift.imm_shift << "\n";
+    } else {
+      std::cout << "  Operando2 (Imediato): 0x" << std::hex
+                << instr.valor_imediato << std::dec << "\n";
+    }
+    break;
+
+  case Opcode::LDR:
+  case Opcode::STR:
+    std::cout << "  Rd:       " << (int)instr.rd << "\n";
+    std::cout << "  Rn:       " << (int)instr.rn << "\n";
+    std::cout << "  Write-back: " << (instr.write_back ? "Sim" : "Não") << "\n";
+    std::cout << "  Indexação: "
+              << (instr.modo_idx == ModoIndexacao::PreIndexado ? "Pré" : "Pós")
+              << "\n";
+    std::cout << "  Offset:   " << (instr.somar_offset ? "(+) " : "(-) ")
+              << "0x" << std::hex << instr.valor_imediato << std::dec << "\n";
+    break;
+
+  case Opcode::B:
+  case Opcode::BL:
+    std::cout << "  Offset Salto: " << instr.offset_salto << " bytes\n";
+    break;
+
+  case Opcode::INVALIDO:
+    std::cout << "  ERRO: A instrução não pôde ser decodificada.\n";
+    break;
+  }
+  std::cout << "------------------------------------------\n";
 }

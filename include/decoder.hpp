@@ -13,3 +13,4 @@
  * @return Uma struct Instrucao preenchida com as informações decodificadas.
  */
 Instrucao decodificar(uint32_t instr_binaria);
+void printarInstrucao(const Instrucao &instr);

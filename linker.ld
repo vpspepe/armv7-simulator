@@ -1,11 +1,16 @@
+ENTRY(_start)
 SECTIONS {
-        .text 0x0: {
-                _start = .;
+    . = 0x8000;
+    . = ALIGN(4);
+
+        .text : {
                 *(.text)
         }
+    . = ALIGN(4);
         .data : {
                 *(.data)
         }
+    . = ALIGN(4);
         .bss : {
                 *(.bss)
         }

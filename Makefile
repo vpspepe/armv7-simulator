@@ -7,7 +7,7 @@ LD = arm-none-eabi-ld
 OBJCOPY = arm-none-eabi-objcopy
 
 # Endereço de carga na memória do simulador (deve bater com 0x8000 do main.cpp)
-LDFLAGS = -Ttext=0x8000
+# LDFLAGS = -Ttext=0x8000
 
 # Executável do simulador
 SIMULADOR = ./build/arm_simulator
