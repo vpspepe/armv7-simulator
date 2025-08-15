@@ -34,12 +34,12 @@ int main(int argc, char *argv[]) {
         rodando = false;
         break;
       case 'k':
-        comando = tui.esperarInput();
-        tui.rolarMemoria(-4 * comando); // Rola para cima
+        // comando = tui.esperarInput();
+        tui.rolarMemoria(-4); // Rola para cima
         break;
       case 'j':
-        comando = tui.esperarInput();
-        tui.rolarMemoria(4 * comando); // Rola para baixo
+        // comando = tui.esperarInput();
+        tui.rolarMemoria(4); // Rola para baixo
         break;
       }
     }

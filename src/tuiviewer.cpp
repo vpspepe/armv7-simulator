@@ -61,7 +61,7 @@ void TUIViewer::desenhar(const CPU &cpu) {
   mvwprintw(win_borda, 1, (width - 24) / 2, "Simulador ARMv7 - PCS3732");
   wattroff(win_borda, A_BOLD);
   mvwprintw(win_borda, height - 2, 2,
-            "Comandos: [p] Passo | [↑/↓] Rolar Memória | [q] Sair");
+            "Comandos: [p] Passo | [J/K] Rolar Memória | [q] Sair");
   wrefresh(win_borda);
 
   // Chama as funções para desenhar o conteúdo de cada painel

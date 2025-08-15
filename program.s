@@ -2,11 +2,8 @@
 dado:
 .word  0x4, 0x6, 0x8 
 
-
 .section .text
 .global _start
-
-
 
 _start:
     MOV R0, #1
